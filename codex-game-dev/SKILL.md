@@ -1,51 +1,50 @@
 ---
 name: shared-game-dev
-description: Build and improve games with a repeatable quality-first workflow covering visual quality, game feel, content completeness, and iteration safety.
+description: Route game-development tasks to dedicated specialist skills, then enforce evidence-based gates for gameplay, visuals, UI, performance, retention, and playtest quality.
 ---
 
-# Shared Game Development
+# Shared Game Dev Router
 
-你是游戏项目的协作开发者。目标不是只让程序启动，而是交付一条可感知、可游玩、可验证、可继续扩展的体验。
+本文件是游戏项目的总路由器。任何游戏任务先经过路由，再调用一个或多个专项 Skill；不得要求用户每次手工指定 Skill。
 
-## 先判断任务类型
+## Routing algorithm
 
-- 新项目：先读取或创建 `templates/game-brief.md`，明确平台、引擎、玩家、核心动作和验收方式。
-- 视觉改进：先读取 `templates/visual-spec.md`，盘点现有资产，再改一条完整场景或关键界面。
-- 玩法改进：先写出“玩家反复执行的动作循环”，再改手感、反馈、节奏或难度。
-- Bug 或性能问题：先复现并记录环境、步骤、期望和实际结果；修复后做最小回归。
-- 内容扩展：先确认新内容是否复用已有系统，避免为单个关卡或道具制造一次性分支。
+1. 识别任务中的对象、风险和验收证据。
+2. 选择一个主 Skill；选择必要的支援 Skills。
+3. 按依赖顺序执行：设计假设 → 原型/实现 → 反馈与视觉 → 平台适配 → QA/试玩。
+4. 汇总四类独立结论：CODE QUALITY、GAMEPLAY QUALITY、VISUAL QUALITY、REAL PLAYTEST。
+5. 缺少对应证据时，不得把该项判为通过。
 
-## 标准工作顺序
+## Route map
 
-1. **定义体验**：一句话说明玩家是谁、做什么、为什么继续。
-2. **建立垂直切片**：只做一条从进入到反馈再到结果的完整路径。
-3. **先可读再好看**：确保目标、危险、可交互物和结果都能被玩家看懂。
-4. **加入游戏感**：输入、动画、音效、粒子、镜头和数值反馈共同确认每个关键动作。
-5. **补齐内容**：加入变化、选择、节奏和收束，不用数量掩盖单调。
-6. **验证与记录**：运行检查、视觉检查、试玩检查、性能检查；把发现写入试玩报告。
-7. **再扩展**：只有垂直切片通过四类质量闸门后，才增加地图、敌人、道具或剧情。
+| Signal | Primary | Supporting |
+| --- | --- | --- |
+| HUD 重叠、文字被裁切、移动端布局 | game-ui-ux | mobile-game-layout, game-visual-qa |
+| 下一关只是换皮、区域差异不足 | game-design-director | gameplay-reality-check, game-retention-review |
+| 合成/点击/拖动没有爽感 | game-feel | game-vfx, game-audio-feedback |
+| 画面不好看、风格不统一 | game-art-direction | game-asset-pipeline, game-visual-qa |
+| Cocos 特效差、材质或性能问题 | game-vfx | game-rendering, cocos-creator-visual-adapter |
+| 新玩法想法、核心循环、关卡结构 | game-design-director | gameplay-reality-check |
+| 动画拖沓、操作被阻断 | game-animation | game-feel, game-visual-qa |
+| 留存、首局、3/10 分钟体验 | game-retention-review | gameplay-reality-check, game-playtest |
+| 试玩、真实用户反馈、版本验收 | game-playtest | game-visual-qa, game-retention-review |
+| 资源导入、命名、尺寸、压缩、缺失素材 | game-asset-pipeline | game-art-direction, game-rendering |
 
-## 四类质量闸门
+## Mandatory gates
 
-每次交付至少回答：
+- SKIN_SWAP_GATE：如果新内容只改变背景、名字、数量或数值，而操作、判断、决策、风险、反馈基本不变，必须为 FAIL。
+- UI_OVERLAP = 0
+- CLIPPED_TEXT = 0
+- OFFSCREEN_CRITICAL_UI = 0
+- UNLABELED_CORE_TARGET = 0
+- SAFE_AREA_VIOLATION = 0
+- OVERFEEDBACK_GATE：过度震屏、击退、粒子遮挡、动画阻断操作或小操作使用重大庆祝反馈时为 FAIL。
+- 核心目标不得只靠颜色表达；优先采用文字 + 图标 + 色彩。
 
-- 视觉：画面是否有明确的风格、层次、焦点和一致的资产规格？
-- 可玩性：玩家是否知道该做什么，操作是否即时，结果是否有反馈？
-- 完整度：是否存在一条不靠开发者口头解释也能完成的体验闭环？
-- 可靠性：是否能重复运行、快速定位问题，并安全地继续添加内容？
+## Evidence contract
 
-## 输出要求
+每次路由必须留下：触发信号、选中的 Skills、关键假设、运行/试玩证据、四类质量结论、未通过闸门和下一步。代码完成、自动化测试通过、Mock、Headless 或 Build PASS 均不能替代真人试玩。
 
-完成任务时报告：
+## Final status
 
-- 改了什么，以及它改善了哪一个质量闸门。
-- 如何运行或试玩。
-- 做了哪些验证。
-- 尚未解决的风险和下一步建议。
-
-## 禁止的默认行为
-
-- 不在没有试玩路径的情况下批量生成内容。
-- 不用占位矩形、随机颜色和默认字体冒充完成的视觉设计。
-- 不把“没有报错”当作“体验完成”。
-- 不为未来可能用到的需求提前引入复杂框架。
+只有所有必要专项 Skill 的 Hard Gates 通过，并且四类结论分别有证据，才能输出 GAME DEV SKILL PACK PHASE 2 = PASS。否则输出 FAIL 或 NOT INTEGRATED，并说明缺失项。

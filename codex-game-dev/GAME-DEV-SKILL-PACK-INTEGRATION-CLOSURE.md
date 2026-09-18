@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | LibraryTidy readable | PASS | H:\got book exists and was inspected |
 | Merge Decor readable | PASS | H:\hello\merge-decor exists and was inspected |
-| Current Skill Pack branch available | PASS | PR #1 head b5b94730a23fead9f877acc82f34d8247f84040e |
+| Current Skill Pack branch available | PASS | preflight head b5b94730a23fead9f877acc82f34d8247f84040e; final closure head 1c3a00364faaf6323434533a41f36f70252e2a60 |
 | Game project worktrees changed | NO | tracked-file status clean before/after audit |
 | Project source/config/assets/saves/releases modified | NO | read-only audit discipline |
 
